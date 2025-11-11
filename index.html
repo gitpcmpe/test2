@@ -6,5 +6,43 @@
 <body>
 	<h1>Hello World!</h1>
 	<p>This is a simple "Hello World" example.</p>
+
+    <div class="stats-container">
+        <p>This page has been viewed <span id="view-counter">...</span> times</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configuration for your counter
+            const workspaceName = 'my-website'; // Replace with your workspace name
+            const counterKey = 'page-views';      // Replace with your counter key
+            const counterElement = document.getElementById('view-counter');
+
+            // Function to increment the counter and update the display
+            async function updateCounter() {
+                try {
+                    // Fetch API call to the counter endpoint with 'up' action to increment
+                    const response = await fetch(`https://api.counterapi.dev/v1/${workspaceName}/${counterKey}/up`);
+                    
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+
+                    const result = await response.json();
+                    
+                    // Update the HTML element with the new count value
+                    counterElement.textContent = result.value;
+
+                } catch (error) {
+                    console.error('Error fetching view count:', error);
+                    counterElement.textContent = 'Error'; // Display error message
+                }
+            }
+
+            // Call the function when the page loads
+            updateCounter();
+        });
+    </script>
 </body>
+	
 </html>
